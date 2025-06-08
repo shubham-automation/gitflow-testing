@@ -21,3 +21,7 @@ db:
   host: ""
   port: "27508"
   database: "defaultdb"
+
+# secret:
+#   dbUser: ""
+#   dbPassword: ""

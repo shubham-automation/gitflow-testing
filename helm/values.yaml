@@ -18,10 +18,10 @@ resources:
     memory: "256Mi"
 
 db:
-  host: "xxxx"
+  host: ""
   port: "27508"
   database: "defaultdb"
 
 secret:
-  dbUser: "xxxx"
-  dbPassword: "xxxxx"
+  dbUser: ""
+  dbPassword: ""

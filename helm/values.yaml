@@ -18,10 +18,10 @@ resources:
     memory: "256Mi"
 
 db:
-  host: "mysql-b8a9210-shubham-db37.c.aivencloud.com"
+  host: "xxxx"
   port: "27508"
   database: "defaultdb"
 
 secret:
-  dbUser: "avnadmin"
-  dbPassword: "AVNS_vc6tn1nNyhWt2rv6TY5"
+  dbUser: "xxxx"
+  dbPassword: "xxxxx"

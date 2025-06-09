@@ -101,7 +101,7 @@ jobs:
             --set db.host=${{ secrets.DB_HOST }} \
             --set secret.dbUser=${{ secrets.DB_USER }} \
             --set secret.dbPassword=${{ secrets.DB_PASSWORD }} \
-            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }}
+            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }} \
             --namespace dev \
             --create-namespace \
             --wait
@@ -176,7 +176,7 @@ jobs:
             --set db.host=${{ secrets.DB_HOST }} \
             --set secret.dbUser=${{ secrets.DB_USER }} \
             --set secret.dbPassword=${{ secrets.DB_PASSWORD }} \
-            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }}           
+            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }} \       
             --namespace qa \
             --create-namespace \
             --wait
@@ -188,7 +188,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -250,7 +250,7 @@ jobs:
             --set db.host=${{ secrets.DB_HOST }} \
             --set secret.dbUser=${{ secrets.DB_USER }} \
             --set secret.dbPassword=${{ secrets.DB_PASSWORD }} \
-            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }}          
+            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }} \
             --namespace prod \
             --create-namespace \
             --wait

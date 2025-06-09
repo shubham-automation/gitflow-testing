@@ -42,7 +42,6 @@ jobs:
           echo "SHORT_COMMIT_ID=$SHORT_COMMIT_ID" >> $GITHUB_ENV
 
       - name: Build, Tag, and Push Image to ACR
-        if: ${{ github.event.inputs.operation == 'deploy_default_feature' || github.event.inputs.operation == 'deploy_new_feature' }}
         run: |
           if [ "$BRANCH" = "develop" ]; then
             IMAGE_TAG="develop"-$SHORT_COMMIT_ID

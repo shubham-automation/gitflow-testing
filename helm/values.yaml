@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: flask-app
   tag: "latest"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: ClusterIP
@@ -25,3 +25,7 @@ db:
 secret:
   dbUser: ""
   dbPassword: ""
+
+imagePullSecret:
+  name: acr-secret
+  dockerconfigjson: ""

@@ -14,6 +14,8 @@ spec:
       labels:
         app: {{ .Release.Name }}-flask-app
     spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret.name }}
       containers:
       - name: flask-app
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

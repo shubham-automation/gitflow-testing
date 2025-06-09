@@ -37,21 +37,21 @@ def init_db():
         cursor.close()
         connection.close()
 
-# @app.route('/users', methods=['GET'])
-# def get_users():
-#     connection = get_db_connection()
-#     if not connection:
-#         return jsonify({'error': 'Database connection failed'}), 500
+@app.route('/users', methods=['GET'])
+def get_users():
+    connection = get_db_connection()
+    if not connection:
+        return jsonify({'error': 'Database connection failed'}), 500
     
-#     try:
-#         cursor = connection.cursor(dictionary=True)
-#         cursor.execute("SELECT * FROM users")
-#         users = cursor.fetchall()
-#         cursor.close()
-#         connection.close()
-#         return jsonify(users), 200
-#     except Error as e:
-#         return jsonify({'error': str(e)}), 500
+    try:
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users")
+        users = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return jsonify(users), 200
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/users', methods=['POST'])
 def add_user():

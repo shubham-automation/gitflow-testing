@@ -57,6 +57,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     environment: dev
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -109,6 +112,9 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'qa' && (startsWith(github.ref_name, 'rel/') || startsWith(github.ref_name, 'hotfix/'))
     environment: qa
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -180,6 +186,9 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod' && (startsWith(github.ref_name, 'rel/') || startsWith(github.ref_name, 'hotfix/'))
     environment: prod
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
       - name: Login to Azure
         uses: azure/login@v2
         with:

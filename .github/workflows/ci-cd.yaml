@@ -172,7 +172,7 @@ jobs:
           #echo "$KUBECONFIG" > ~/.kube/config
           helm upgrade --install flask-app ./helm \
             --set image.repository=${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }} \
-            --set image.tag="IMAGE_TAG" \
+            --set image.tag="$IMAGE_TAG" \
             --set db.host=${{ secrets.DB_HOST }} \
             --set secret.dbUser=${{ secrets.DB_USER }} \
             --set secret.dbPassword=${{ secrets.DB_PASSWORD }} \
@@ -246,7 +246,7 @@ jobs:
           #echo "$KUBECONFIG" > ~/.kube/config
           helm upgrade --install flask-app ./helm \
             --set image.repository=${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }} \
-            --set image.tag="IMAGE_TAG" \
+            --set image.tag="$IMAGE_TAG" \
             --set db.host=${{ secrets.DB_HOST }} \
             --set secret.dbUser=${{ secrets.DB_USER }} \
             --set secret.dbPassword=${{ secrets.DB_PASSWORD }} \

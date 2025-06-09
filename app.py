@@ -5,7 +5,6 @@ import os
 
 app = Flask(__name__)
 
-# MySQL database configuration from environment variables
 db_config = {
     'host': os.getenv('DB_HOST'),
     'user': os.getenv('DB_USER'),
@@ -14,7 +13,6 @@ db_config = {
     'port': os.getenv('DB_PORT')
 }
 
-# Function to create a database connection
 def get_db_connection():
     try:
         connection = mysql.connector.connect(**db_config)
@@ -24,7 +22,6 @@ def get_db_connection():
         print(f"Error connecting to MySQL: {e}")
         return None
 
-# Create a sample table if it doesn't exist
 def init_db():
     connection = get_db_connection()
     if connection:
@@ -40,24 +37,22 @@ def init_db():
         cursor.close()
         connection.close()
 
-# GET method to retrieve all users
-@app.route('/users', methods=['GET'])
-def get_users():
-    connection = get_db_connection()
-    if not connection:
-        return jsonify({'error': 'Database connection failed'}), 500
+# @app.route('/users', methods=['GET'])
+# def get_users():
+#     connection = get_db_connection()
+#     if not connection:
+#         return jsonify({'error': 'Database connection failed'}), 500
     
-    try:
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users")
-        users = cursor.fetchall()
-        cursor.close()
-        connection.close()
-        return jsonify(users), 200
-    except Error as e:
-        return jsonify({'error': str(e)}), 500
+#     try:
+#         cursor = connection.cursor(dictionary=True)
+#         cursor.execute("SELECT * FROM users")
+#         users = cursor.fetchall()
+#         cursor.close()
+#         connection.close()
+#         return jsonify(users), 200
+#     except Error as e:
+#         return jsonify({'error': str(e)}), 500
 
-# POST method to add a new user
 @app.route('/users', methods=['POST'])
 def add_user():
     data = request.get_json()
@@ -82,5 +77,5 @@ def add_user():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    init_db()  # Initialize the database table
+    init_db()
     app.run(host='0.0.0.0', port=5000)

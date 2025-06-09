@@ -17,7 +17,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: arc-org-runner-set
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
           docker push ${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }}:$IMAGE_TAG
 
   deploy-dev:
-    runs-on: ubuntu-latest
+    runs-on: arc-org-runner-set
     needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     environment: dev
@@ -78,12 +78,15 @@ jobs:
           helm upgrade --install flask-app ./helm \
             --set image.repository=${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }} \
             --set image.tag="develop"-$SHORT_COMMIT_ID \
+            --set db.host="" \
+            --set secret.dbUser="" \
+            --set secret.dbPassword="" \
             --namespace dev \
             --create-namespace \
             --wait
 
   deploy-qa:
-    runs-on: ubuntu-latest
+    runs-on: arc-org-runner-set
     needs: build
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'qa' && (startsWith(github.ref_name, 'rel/') || startsWith(github.ref_name, 'hotfix/'))
     environment: qa
@@ -123,12 +126,15 @@ jobs:
           helm upgrade --install flask-app ./helm \
             --set image.repository=${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }} \
             --set image.tag=$IMAGE_TAG \
+            --set db.host="" \
+            --set secret.dbUser="" \
+            --set secret.dbPassword="" \            
             --namespace qa \
             --create-namespace \
             --wait
 
   deploy-prod:
-    runs-on: ubuntu-latest
+    runs-on: arc-org-runner-set
     needs: build
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod' && (startsWith(github.ref_name, 'rel/') || startsWith(github.ref_name, 'hotfix/'))
     environment: prod
@@ -168,6 +174,9 @@ jobs:
           helm upgrade --install flask-app ./helm \
             --set image.repository=${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }} \
             --set image.tag=$IMAGE_TAG \
+            --set db.host="" \
+            --set secret.dbUser="" \
+            --set secret.dbPassword="" \            
             --namespace prod \
             --create-namespace \
             --wait

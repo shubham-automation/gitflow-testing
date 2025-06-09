@@ -168,16 +168,15 @@ jobs:
         #  KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           IMAGE_TAG="$VERSION"-"$SHORT_COMMIT_ID"
-          echo "IMAGE ID : $IMAGE_TAG"
           #mkdir -p ~/.kube
           #echo "$KUBECONFIG" > ~/.kube/config
           helm upgrade --install flask-app ./helm \
             --set image.repository=${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }} \
-            --set image.tag="$VERSION"-"$SHORT_COMMIT_ID" \
+            --set image.tag="IMAGE_TAG" \
             --set db.host=${{ secrets.DB_HOST }} \
             --set secret.dbUser=${{ secrets.DB_USER }} \
             --set secret.dbPassword=${{ secrets.DB_PASSWORD }} \
-            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }} \       
+            --set imagePullSecret.dockerconfigjson=${{ steps.get_dockerconfigjson.outputs.dockerconfigjson }} \
             --namespace qa \
             --create-namespace \
             --wait
@@ -242,12 +241,12 @@ jobs:
         #env:
         #  KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
-          IMAGE_TAG=$VERSION-$SHORT_COMMIT_ID
+          IMAGE_TAG="$VERSION"-"$SHORT_COMMIT_ID"
           #mkdir -p ~/.kube
           #echo "$KUBECONFIG" > ~/.kube/config
           helm upgrade --install flask-app ./helm \
             --set image.repository=${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_REPOSITORY }} \
-            --set image.tag=$IMAGE_TAG \
+            --set image.tag="IMAGE_TAG" \
             --set db.host=${{ secrets.DB_HOST }} \
             --set secret.dbUser=${{ secrets.DB_USER }} \
             --set secret.dbPassword=${{ secrets.DB_PASSWORD }} \

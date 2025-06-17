@@ -71,6 +71,9 @@ jobs:
     
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group ${{ secrets.K8S_RESOURCE_GROUP }} --name ${{ secrets.K8S_CLUSTER_NAME }} --overwrite-existing
+  
+      - name: Kubelogin plugin authentication
+        run: kubelogin convert-kubeconfig -l azurecli
 
       - name: Get short commit ID
         id: get_commit
@@ -91,8 +94,6 @@ jobs:
           echo "dockerconfigjson=$SECRET_JSON" >> $GITHUB_OUTPUT
 
       - name: Deploy Helm chart
-        #env:
-          #KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           #mkdir -p ~/.kube
           #echo "$KUBECONFIG" > ~/.kube/config
@@ -116,6 +117,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Validate branch name
+        run: |
+          if [[ "${{ github.ref_name }}" =~ ^(rel|hotfix)/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Branch ${{ github.ref_name }} is valid for QA deployment"
+          else
+            echo "Error: Branch name ${{ github.ref_name }} does not match rel/x.x.x or hotfix/x.x.x format."
+            exit 1
+          fi
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -127,29 +137,18 @@ jobs:
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group ${{ secrets.K8S_RESOURCE_GROUP }} --name ${{ secrets.K8S_CLUSTER_NAME }} --overwrite-existing
 
+      - name: Kubelogin plugin authentication
+        run: kubelogin convert-kubeconfig -l azurecli
+
       - name: Get VERSION from branch name
         id: get_version
         run: |
           echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Validate branch name
-        run: |
-          if [[ "${{ github.ref_name }}" =~ ^(rel|hotfix)/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Branch ${{ github.ref_name }} is valid for QA deployment"
-          else
-            echo "Error: Branch name ${{ github.ref_name }} does not match rel/x.x.x or hotfix/x.x.x format."
-            exit 1
-          fi
-
       - name: Get short commit ID
         id: get_commit
         run: |
           echo "SHORT_COMMIT_ID=${GITHUB_SHA::7}" >> $GITHUB_ENV
-
-      # - name: Set up Helm
-      #   uses: azure/setup-helm@v3
-      #   with:
-      #     version: v3.12.0
 
       - name: Generate ACR pull secret
         id: get_dockerconfigjson
@@ -165,8 +164,6 @@ jobs:
           echo "dockerconfigjson=$SECRET_JSON" >> $GITHUB_OUTPUT
 
       - name: Deploy Helm chart
-        #env:
-        #  KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           IMAGE_TAG="$VERSION"-"$SHORT_COMMIT_ID"
           #mkdir -p ~/.kube
@@ -190,6 +187,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Validate branch name
+        run: |
+          if [[ "${{ github.ref_name }}" =~ ^(rel|hotfix)/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Branch ${{ github.ref_name }} is valid for PROD deployment"
+          else
+            echo "Error: Branch name ${{ github.ref_name }} does not match rel/x.x.x or hotfix/x.x.x format."
+            exit 1
+          fi
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -201,29 +207,18 @@ jobs:
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group ${{ secrets.K8S_RESOURCE_GROUP }} --name ${{ secrets.K8S_CLUSTER_NAME }} --overwrite-existing
 
+      - name: Kubelogin plugin authentication
+        run: kubelogin convert-kubeconfig -l azurecli
+
       - name: Get VERSION from branch name
         id: get_version
         run: |
           echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Validate branch name
-        run: |
-          if [[ "${{ github.ref_name }}" =~ ^(rel|hotfix)/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Branch ${{ github.ref_name }} is valid for QA deployment"
-          else
-            echo "Error: Branch name ${{ github.ref_name }} does not match rel/x.x.x or hotfix/x.x.x format."
-            exit 1
-          fi
-
       - name: Get short commit ID
         id: get_commit
         run: |
           echo "SHORT_COMMIT_ID=${GITHUB_SHA::7}" >> $GITHUB_ENV
-
-      # - name: Set up Helm
-      #   uses: azure/setup-helm@v3
-      #   with:
-      #     version: v3.12.0
 
       - name: Generate ACR pull secret
         id: get_dockerconfigjson
@@ -239,8 +234,6 @@ jobs:
           echo "dockerconfigjson=$SECRET_JSON" >> $GITHUB_OUTPUT
 
       - name: Deploy Helm chart
-        #env:
-        #  KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           IMAGE_TAG="$VERSION"-"$SHORT_COMMIT_ID"
           #mkdir -p ~/.kube
